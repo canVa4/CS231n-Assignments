@@ -325,6 +325,9 @@ class FullyConnectedNet(object):
                 else:
                     cache = None
             caches.append(cache)
+            if self.use_dropout and i != self.num_layers-1:
+                scores, cache = dropout_forward(scores, self.dropout_param)
+                caches.append(cache)
         pass
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -362,13 +365,14 @@ class FullyConnectedNet(object):
             if i == self.num_layers - 1:
                 dx, grads[w], grads[b] = affine_backward(dx, caches.pop())
             else:
+                if self.use_dropout:
+                    dx = dropout_backward(dx, caches.pop())
                 if self.normalization is None:
                     dx, grads[w], grads[b] = affine_relu_backward(dx, caches.pop())
                 if self.normalization == 'batchnorm':
                     dx, grads[w], grads[b], grads[gamma], grads[beta] = affine_bn_relu_backward(dx, caches.pop())
                 if self.normalization == 'layernorm':
                     dx, grads[w], grads[b], grads[gamma], grads[beta] = affine_ln_relu_backward(dx, caches.pop())
-
             grads[w] += reg * self.params[w]
         pass
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
