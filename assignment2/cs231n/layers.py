@@ -643,14 +643,9 @@ def conv_backward_naive(dout, cache):
             for h_mid in range(H_out):
                 for w_mid in range(W_out):
                     window = x_pad[n, :, stride * h_mid:stride * h_mid + HH, stride * w_mid:stride * w_mid + WW]
-                    dx_pad[n, :, stride * h_mid:stride * h_mid + HH, stride * w_mid:stride * w_mid + WW] += dout[
-                                                                                                                n, f, h_mid, w_mid] * w[
-                                                                                                                                      f,
-                                                                                                                                      :,
-                                                                                                                                      :,
-                                                                                                                                      :]
+                    dx_pad[n, :, stride * h_mid:stride * h_mid + HH, stride * w_mid:stride * w_mid + WW] += \
+                        dout[n, f, h_mid, w_mid] * w[f, :, :, :]
                     dw[f, :, :, :] += window * dout[n, f, h_mid, w_mid]
-    pass
     dx = dx_pad[:, :, pad:pad + H, pad:pad + W]
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
