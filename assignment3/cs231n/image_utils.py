@@ -4,9 +4,12 @@ standard_library.install_aliases()
 from builtins import range
 import urllib.request, urllib.error, urllib.parse, os, tempfile
 
+from PIL import Image
 import numpy as np
-from scipy.misc import imread, imresize
 
+
+from scipy.misc import imread, imresize
+# from matplotlib.pyplot import imread
 """
 Utility functions used for viewing and processing images.
 """
@@ -85,5 +88,6 @@ def load_image(filename, size=None):
         min_idx = np.argmin(orig_shape)
         scale_factor = float(size) / orig_shape[min_idx]
         new_shape = (orig_shape * scale_factor).astype(int)
-        img = imresize(img, scale_factor)
+        # img = imresize(img, scale_factor)
+        img = np.array(Image.fromarray(img).resize(scale_factor))
     return img
