@@ -4,7 +4,7 @@ standard_library.install_aliases()
 from builtins import range
 import urllib.request, urllib.error, urllib.parse, os, tempfile
 
-from PIL import Image
+# from PIL import Image
 import numpy as np
 
 
@@ -67,7 +67,8 @@ def image_from_url(url):
         with open(fname, 'wb') as ff:
             ff.write(f.read())
         img = imread(fname)
-        os.remove(fname)
+        print(fname)
+        # os.remove(fname)
         return img
     except urllib.error.URLError as e:
         print('URL Error: ', e.reason, url)
@@ -88,6 +89,5 @@ def load_image(filename, size=None):
         min_idx = np.argmin(orig_shape)
         scale_factor = float(size) / orig_shape[min_idx]
         new_shape = (orig_shape * scale_factor).astype(int)
-        # img = imresize(img, scale_factor)
-        img = np.array(Image.fromarray(img).resize(scale_factor))
+        img = imresize(img, scale_factor)
     return img
